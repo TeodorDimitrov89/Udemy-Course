@@ -8,8 +8,6 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import {UsersPage} from "../pages/users/users";
 import {UserPage} from "../pages/users/user/user";
-import {ShopPage} from "../pages/shop/shop";
-import {BuyoutPage} from "../pages/buyout/buyout";
 
 @NgModule({
   declarations: [
@@ -17,8 +15,6 @@ import {BuyoutPage} from "../pages/buyout/buyout";
     HomePage,
     UsersPage,
     UserPage,
-    ShopPage,
-    BuyoutPage
   ],
   imports: [
     BrowserModule,
@@ -30,8 +26,6 @@ import {BuyoutPage} from "../pages/buyout/buyout";
     HomePage,
     UsersPage,
     UserPage,
-    ShopPage,
-    BuyoutPage,
   ],
   providers: [
     StatusBar,
