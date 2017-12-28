@@ -1,0 +1,19 @@
+Configuring Page Transitions
+Section 2, Lecture 30
+
+Besides the page you want to go to and data you want to pass along, you can pass a third argument to push() (and a first argument to pop()): Navigation Options
+
+These options allow you to configure the page transition. You do set your own configuration by passing a JS object where you may set the following properties:
+
+    animate (boolean): Whether or not the transition should animate.
+    animation (string): What kind of animation should be used.
+    direction (string): The conceptual direction the user is navigating. For example, is the user navigating forward, or back?
+    duration (number): The length in milliseconds the animation should take.
+    easing (string): The easing for the animation.
+    
+    Example:
+          this.navCtrl.push(NewPage, {}, {
+          direction: 'back', // default for push is 'forward'
+          duration: 2000, // 2 seconds
+          easing: 'ease-out'
+      });
