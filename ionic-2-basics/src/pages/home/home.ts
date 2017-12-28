@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import {UsersPage} from "../users/users";
+import {ShopPage} from "../shop/shop";
+import {BuyoutPage} from "../buyout/buyout";
 
 @Component({
   selector: 'page-home',
@@ -9,9 +11,13 @@ import {UsersPage} from "../users/users";
 export class HomePage {
 
   constructor(public navCtrl: NavController) {}
-
-  onGoingToUsers() {
-    this.navCtrl.push(UsersPage);
+  private navigateToPage(page) {
+    return this.navCtrl.push(page);
   }
-
+  onGoToUsers() {
+    this.navigateToPage(UsersPage);
+  }
+  onGoToShop() {
+    this.navigateToPage(ShopPage);
+  }
 }
