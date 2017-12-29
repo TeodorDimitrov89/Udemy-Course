@@ -1,6 +1,10 @@
 # Udemy-Course
 Ionic 2 / Ionic 3 Basics
 
+How to start?
+	1. Download the repo.
+	2. In the terminal write "ionic serve" to start the server.
+	
 Section 2: Mastering the Basics
 
 Tasks:
