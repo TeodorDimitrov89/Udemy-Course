@@ -2,6 +2,7 @@
 Ionic 2 / Ionic 3 Basics
 
 How to start?
+
 	1. Download the repo.
 	2. In the terminal write "ionic serve" to start the server.
 	
@@ -31,3 +32,9 @@ Exercise 3:
 Exercise 4:
 
 	Add a "Buy" Button to the "Buyout" Page and have this Button load the Root Page ("Home" Page)
+	
+	
+Section 3: Favourite Quotes Application
+
+	Check application structure image
+	
