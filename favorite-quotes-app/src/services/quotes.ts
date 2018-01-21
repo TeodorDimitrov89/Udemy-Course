@@ -11,7 +11,6 @@ export class QuotesService {
     const position = this.favouriteQuotes.findIndex((quoteEl: Quote) => {
       return quoteEl.id === quote.id;
     });
-
     this.favouriteQuotes.splice(position, 1);
   }
 

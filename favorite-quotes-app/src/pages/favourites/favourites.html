@@ -9,7 +9,7 @@
 
 <ion-content padding>
 <ion-list>
-  <ion-item *ngFor="let quote of favouriteQuotes">
+  <ion-item *ngFor="let quote of favouriteQuotes" (click)="onViewQuote(quote)">
     <h2>{{ quote.person }}</h2>
     <p>{{ quote.text }}</p>
   </ion-item>
