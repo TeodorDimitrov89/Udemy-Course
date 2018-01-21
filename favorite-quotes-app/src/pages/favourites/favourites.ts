@@ -27,6 +27,11 @@ export class FavouritesPage {
       if(remove) {
         this.quotesService.removeQuoteFavourite(quote);
       }
+      // this.favouriteQuotes =this.quotesService.getFavouriteQuotes();
+      const position = this.favouriteQuotes.findIndex((quoteEl: Quote) => {
+        return quoteEl.id == quote.id
+      })
+      this.favouriteQuotes.splice(position, 1);
     });
   }
 }
