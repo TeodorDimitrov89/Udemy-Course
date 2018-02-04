@@ -26,10 +26,11 @@ export class FavouritesPage {
     modal.onDidDismiss((remove: boolean) => {
       if(remove) {
         // this.quotesService.removeQuoteFavourite(quote);
-        const position = this.favouriteQuotes.findIndex((quoteEl: Quote) => {
-          return quoteEl.id == quote.id
-        })
-        this.favouriteQuotes.splice(position, 1);
+        // const position = this.favouriteQuotes.findIndex((quoteEl: Quote) => {
+        //   return quoteEl.id == quote.id
+        // })
+        // this.favouriteQuotes.splice(position, 1);
+        this.onRemoveFromFavourites(quote);
       }
       // this.favouriteQuotes =this.quotesService.getFavouriteQuotes();
       // const position = this.favouriteQuotes.findIndex((quoteEl: Quote) => {
@@ -39,6 +40,10 @@ export class FavouritesPage {
     });
   }
   onRemoveFromFavourites(quote:Quote) {
-
+    this.quotesService.removeQuoteFavourite(quote);
+    const position = this.favouriteQuotes.findIndex((quoteEl: Quote) => {
+      return quoteEl.id == quote.id
+    });
+    this.favouriteQuotes.splice(position, 1);
   }
 }
