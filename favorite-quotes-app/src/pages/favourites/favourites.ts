@@ -25,13 +25,20 @@ export class FavouritesPage {
     modal.present();
     modal.onDidDismiss((remove: boolean) => {
       if(remove) {
-        this.quotesService.removeQuoteFavourite(quote);
+        // this.quotesService.removeQuoteFavourite(quote);
+        const position = this.favouriteQuotes.findIndex((quoteEl: Quote) => {
+          return quoteEl.id == quote.id
+        })
+        this.favouriteQuotes.splice(position, 1);
       }
       // this.favouriteQuotes =this.quotesService.getFavouriteQuotes();
-      const position = this.favouriteQuotes.findIndex((quoteEl: Quote) => {
-        return quoteEl.id == quote.id
-      })
-      this.favouriteQuotes.splice(position, 1);
+      // const position = this.favouriteQuotes.findIndex((quoteEl: Quote) => {
+      //   return quoteEl.id == quote.id
+      // })
+      // this.favouriteQuotes.splice(position, 1);
     });
+  }
+  onRemoveFromFavourites(quote:Quote) {
+
   }
 }
