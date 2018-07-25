@@ -1,14 +1,14 @@
 webpackJsonp([1],{
 
-/***/ 275:
+/***/ 274:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ShoppingListPageModule", function() { return ShoppingListPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RecipesPageModule", function() { return RecipesPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shopping_list__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__recipes__ = __webpack_require__(99);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,23 +18,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var ShoppingListPageModule = /** @class */ (function () {
-    function ShoppingListPageModule() {
+var RecipesPageModule = /** @class */ (function () {
+    function RecipesPageModule() {
     }
-    ShoppingListPageModule = __decorate([
+    RecipesPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__shopping_list__["a" /* ShoppingListPage */],
+                __WEBPACK_IMPORTED_MODULE_2__recipes__["a" /* RecipesPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__shopping_list__["a" /* ShoppingListPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__recipes__["a" /* RecipesPage */]),
             ],
         })
-    ], ShoppingListPageModule);
-    return ShoppingListPageModule;
+    ], RecipesPageModule);
+    return RecipesPageModule;
 }());
 
-//# sourceMappingURL=shopping-list.module.js.map
+//# sourceMappingURL=recipes.module.js.map
 
 /***/ })
 
