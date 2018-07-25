@@ -4,10 +4,12 @@ import { Ingredient } from "../../models/ingredient";
 @Injectable()
 export class ShoppingListService {
   private ingredients: Ingredient[] = [];
+  // private id:number = 0;
 
   addItem(name:string, amount:number) {
+      // this.ingredients.push(new Ingredient(this.id,name,amount));
       this.ingredients.push(new Ingredient(name,amount));
-      console.log(this.ingredients);
+      // this.id++;
   }
 
   addItems(items:Ingredient[]) {
@@ -19,7 +21,9 @@ export class ShoppingListService {
   }
 
   removeItem(index: number) {
-    this.ingredients.splice(index,1);
+      // const position = this.ingredients.findIndex((i) => {
+      //     return i.id === item.id;
+      // });
+      this.ingredients.splice(index,1);
   }
-
 }
