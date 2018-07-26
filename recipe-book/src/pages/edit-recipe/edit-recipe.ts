@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {ActionSheetController, AlertController, NavParams} from 'ionic-angular';
+import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
+import {ActionSheetController, AlertController, NavParams, ToastController} from 'ionic-angular';
 
 
 @Component({
@@ -13,9 +13,10 @@ export class EditRecipePage implements OnInit{
   selectOptions: Array<String> = ['Easy', 'Medium', 'Hard'];
   recipeForm: FormGroup;
 
-  constructor(public navParams: NavParams,
-              public actionSheetCtrl: ActionSheetController,
-              public alertCtrl: AlertController) {}
+  constructor(private navParams: NavParams,
+              private actionSheetCtrl: ActionSheetController,
+              private alertCtrl: AlertController,
+              private toastCtrl: ToastController) {}
 
   ngOnInit() {
     this.navParams.get('mode');
@@ -33,17 +34,20 @@ export class EditRecipePage implements OnInit{
             {
               text: 'Add Ingredient',
               handler: () => {
-                  console.log('Ingredient clicked');
-
-                  this.createNewIngredientAlert();
-
+                  this.createNewIngredientAlert().present();
               }
             },
             {
                 text: 'Remove all Ingredient',
                 role: 'destructive',
                 handler: () => {
-                    console.log('Remove all Ingredient clicked');
+                    this.removeAllIngredientItems();
+                    const toastOptions = {
+                        message: 'All ingredients was removed successfully',
+                        duration: 2000,
+                        showCloseButton:true
+                    };
+                    this.presentToast(toastOptions);
                 }
             },
             {
@@ -59,8 +63,19 @@ export class EditRecipePage implements OnInit{
       actionSheet.present();
   }
 
+  private presentToast(toastOptions:Object) {
+
+      let toast = this.toastCtrl.create(toastOptions);
+
+      toast.onDidDismiss(() => {
+          console.log('Dismissed toast');
+      });
+
+      toast.present();
+  }
+
   private createNewIngredientAlert() {
-      const prompt = this.alertCtrl.create({
+      return this.alertCtrl.create({
           title: 'Add Ingredient',
           inputs: [
               {
@@ -76,26 +91,43 @@ export class EditRecipePage implements OnInit{
               {
                   text: 'Add',
                   handler: data => {
-
-
+                      let toastOptions = {
+                          message: 'Ingredient was added successfully',
+                          // duration: 2000,
+                          showCloseButton:true,
+                          closeButtonText: 'Ok'
+                      };
                       if(data.name.trim() == '' || data.name == null) {
-                          console.log(data);
+                          toastOptions.message = 'Name should not be empty!';
+                          this.presentToast(toastOptions);
+                          return;
                       }
 
-                      console.log('Saved clicked');
+                      (this.recipeForm.get('ingredients') as FormArray)
+                          .push(new FormControl(data.name, Validators.required));
+                      this.presentToast(toastOptions);
                   }
               }
           ]
       });
+  }
 
-      prompt.present();
+  private removeAllIngredientItems() {
+    const fArray:FormArray = this.recipeForm.get('ingredients') as FormArray;
+    const len = fArray.length;
+    if(len > 0) {
+        for(let i = len - 1; i >= 0; i--) {
+            fArray.removeAt(i);
+        }
+    }
   }
 
   private initializeForm() {
     this.recipeForm = new FormGroup({
       'title': new FormControl(null, Validators.required),
       'description': new FormControl(null,Validators.required),
-      'difficulty': new FormControl('Medium',Validators.required)
+      'difficulty': new FormControl('Medium',Validators.required),
+      'ingredients': new FormArray([])
     });
   }
 }
