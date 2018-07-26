@@ -27,7 +27,7 @@ var ShoppingListPageModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_2__shopping_list__["a" /* ShoppingListPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__shopping_list__["a" /* ShoppingListPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__shopping_list__["a" /* ShoppingListPage */]),
             ],
         })
     ], ShoppingListPageModule);
