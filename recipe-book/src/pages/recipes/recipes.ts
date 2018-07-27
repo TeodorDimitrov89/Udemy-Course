@@ -28,6 +28,6 @@ export class RecipesPage {
     }
 
     onLoadRecipe(recipe:Recipe, index: number) {
-        this.navCtrl.push(RecipePage, {recipe:recipe});
+        this.navCtrl.push(RecipePage, { recipe:recipe, index:index });
     }
 }
