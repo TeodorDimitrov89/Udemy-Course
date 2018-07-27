@@ -1,18 +1,67 @@
-<!--
-  Generated template for the RecipePage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>recipe</ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <ion-title>{{ recipe.title }}</ion-title>
+    </ion-navbar>
 
 </ion-header>
 
-
 <ion-content padding>
+    <!--<ion-list>-->
+    <!--<ion-item text-center>-->
+    <!--<h2>Spaghetti</h2>-->
+    <!--<ion-note>Easy</ion-note>-->
+    <!--</ion-item>-->
+    <!--</ion-list>-->
+    <ion-grid>
+        <ion-row>
+            <ion-col text-center>
+                <h2>{{ recipe.title }}</h2>
+                <ion-note>{{ recipe.difficulty | uppercase }}</ion-note>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col text-center>
+                <p>{{ recipe.description }}</p>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-list>
+                    <ion-item *ngFor="let ingredient of recipe.ingredients">
+                        {{ ingredient.name }}
+                    </ion-item>
+                </ion-list>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="recipe.ingredients.length > 0">
+            <ion-col>
+                <button type="button"
+                        clear
+                        ion-button
+                        (click)="onAddIngredients()">Add Ingredient to Shopping List
+                </button>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col text-center>
+                <button
+                        ion-button
+                        outline
+                        block
+                        (click)="onEditRecipe()">Edit Recipe</button>
+            </ion-col>
+            <ion-col text-center>
+                <button
+                        ion-button
+                        outline
+                        block
+                        (click)="onRemoveRecipe()"
+                        color="danger">Remove Recipe</button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
 
 </ion-content>

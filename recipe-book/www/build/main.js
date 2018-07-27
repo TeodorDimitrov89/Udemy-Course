@@ -136,6 +136,8 @@ var TabsPage = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__edit_recipe_edit_recipe__ = __webpack_require__(197);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_recipe_service_recipe__ = __webpack_require__(277);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__recipe_recipe__ = __webpack_require__(198);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -148,20 +150,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 var RecipesPage = /** @class */ (function () {
-    function RecipesPage(navCtrl) {
+    function RecipesPage(navCtrl, recipeService) {
         this.navCtrl = navCtrl;
+        this.recipeService = recipeService;
     }
     RecipesPage.prototype.onNewRecipe = function () {
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__edit_recipe_edit_recipe__["a" /* EditRecipePage */], { mode: 'New' });
     };
+    RecipesPage.prototype.ionViewWillEnter = function () {
+        this.recipes = this.recipeService.getRecipes();
+    };
+    RecipesPage.prototype.onLoadRecipe = function (recipe, index) {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__recipe_recipe__["a" /* RecipePage */], { recipe: recipe });
+    };
     RecipesPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-recipes',template:/*ion-inline-start:"/home/teo/projects/projects/Udemy-Course/recipe-book/src/pages/recipes/recipes.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-buttons end>\n            <button ion-button icon-only (click)="onNewRecipe()">\n                <ion-icon name="add" ></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-title text-center>Recipes</ion-title>\n    </ion-navbar>\n</ion-header>\n\n\n<ion-content padding>\n\n</ion-content>\n'/*ion-inline-end:"/home/teo/projects/projects/Udemy-Course/recipe-book/src/pages/recipes/recipes.html"*/,
+            selector: 'page-recipes',template:/*ion-inline-start:"/home/teo/projects/projects/Udemy-Course/recipe-book/src/pages/recipes/recipes.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-buttons end>\n            <button ion-button icon-only (click)="onNewRecipe()">\n                <ion-icon name="add" ></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-title text-center>Recipes</ion-title>\n    </ion-navbar>\n</ion-header>\n\n\n<ion-content padding>\n    <ion-list>\n        <button ion-item\n                detail-push\n                *ngFor="let recipe of recipes; let i = index"\n                (click)="onLoadRecipe(recipe, i)">\n            <h2>{{recipe.title}}</h2>\n            <ion-note>{{recipe.difficulty}}</ion-note>\n        </button>\n    </ion-list>\n</ion-content>\n'/*ion-inline-end:"/home/teo/projects/projects/Udemy-Course/recipe-book/src/pages/recipes/recipes.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_recipe_service_recipe__["a" /* RecipeService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_recipe_service_recipe__["a" /* RecipeService */]) === "function" && _b || Object])
     ], RecipesPage);
     return RecipesPage;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=recipes.js.map
@@ -176,6 +188,7 @@ var RecipesPage = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_recipe_service_recipe__ = __webpack_require__(277);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -188,12 +201,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var EditRecipePage = /** @class */ (function () {
-    function EditRecipePage(navParams, actionSheetCtrl, alertCtrl, toastCtrl) {
+    function EditRecipePage(navParams, actionSheetCtrl, alertCtrl, toastCtrl, recipeService, navCtrl) {
         this.navParams = navParams;
         this.actionSheetCtrl = actionSheetCtrl;
         this.alertCtrl = alertCtrl;
         this.toastCtrl = toastCtrl;
+        this.recipeService = recipeService;
+        this.navCtrl = navCtrl;
         this.mode = 'New';
         this.selectOptions = ['Easy', 'Medium', 'Hard'];
     }
@@ -202,7 +218,16 @@ var EditRecipePage = /** @class */ (function () {
         this.initializeForm();
     };
     EditRecipePage.prototype.onSubmit = function () {
-        console.log(this.recipeForm);
+        var value = this.recipeForm.value;
+        var ingredients = [];
+        if (value.ingredients.length > 0) {
+            ingredients = value.ingredients.map(function (name) {
+                return { name: name, amount: 1 };
+            });
+        }
+        this.recipeService.addRecipe(value.title, value.description, value.difficulty, ingredients);
+        this.recipeForm.reset();
+        this.navCtrl.popToRoot();
     };
     EditRecipePage.prototype.onManageIngredient = function () {
         var _this = this;
@@ -220,12 +245,6 @@ var EditRecipePage = /** @class */ (function () {
                     role: 'destructive',
                     handler: function () {
                         _this.removeAllIngredientItems();
-                        var toastOptions = {
-                            message: 'All ingredients was removed successfully',
-                            duration: 2000,
-                            showCloseButton: true
-                        };
-                        _this.presentToast(toastOptions);
                     }
                 },
                 {
@@ -241,9 +260,6 @@ var EditRecipePage = /** @class */ (function () {
     };
     EditRecipePage.prototype.presentToast = function (toastOptions) {
         var toast = this.toastCtrl.create(toastOptions);
-        toast.onDidDismiss(function () {
-            console.log('Dismissed toast');
-        });
         toast.present();
     };
     EditRecipePage.prototype.createNewIngredientAlert = function () {
@@ -266,9 +282,7 @@ var EditRecipePage = /** @class */ (function () {
                     handler: function (data) {
                         var toastOptions = {
                             message: 'Ingredient was added successfully',
-                            // duration: 2000,
-                            showCloseButton: true,
-                            closeButtonText: 'Ok'
+                            duration: 2000,
                         };
                         if (data.name.trim() == '' || data.name == null) {
                             toastOptions.message = 'Name should not be empty!';
@@ -290,6 +304,11 @@ var EditRecipePage = /** @class */ (function () {
             for (var i = len - 1; i >= 0; i--) {
                 fArray.removeAt(i);
             }
+            var toastOptions = {
+                message: 'All ingredients was removed successfully',
+                duration: 2000,
+            };
+            this.presentToast(toastOptions);
         }
     };
     EditRecipePage.prototype.initializeForm = function () {
@@ -302,12 +321,12 @@ var EditRecipePage = /** @class */ (function () {
     };
     EditRecipePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-edit-recipe',template:/*ion-inline-start:"/home/teo/projects/projects/Udemy-Course/recipe-book/src/pages/edit-recipe/edit-recipe.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <ion-buttons left>\n      <button navPop ion-button icon-only>\n        <ion-icon color="light" name="arrow-back"></ion-icon>\n      </button>\n    </ion-buttons>\n\n    <ion-title>{{mode}} Recipe</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">\n    <ion-list>\n\n      <ion-item>\n        <ion-label floating>Title</ion-label>\n        <ion-input\n            type="text"\n            formControlName="title"></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Description</ion-label>\n        <ion-textarea formControlName="description"></ion-textarea>\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Difficulty</ion-label>\n        <ion-select formControlName="difficulty">\n          <ion-option *ngFor="let option of selectOptions"\n                      [value]="option">\n            {{option}}\n          </ion-option>\n        </ion-select>\n      </ion-item>\n\n    </ion-list>\n\n    <button type="button"\n            clear\n            ion-button\n            block\n            (click)="onManageIngredient()">Manage Ingredient</button>\n    <ion-list formArrayName="ingredients">\n      <ion-item *ngFor="let igControl of recipeForm.get(\'ingredients\').controls; let i = index">\n        <ion-label floating>Name</ion-label>\n        <ion-input\n            type="text"\n            [formControlName]="i"\n        ></ion-input>\n      </ion-item>\n    </ion-list>\n    <button type="submit" ion-button block>{{ mode }} Recipe</button>\n  </form>\n</ion-content>\n'/*ion-inline-end:"/home/teo/projects/projects/Udemy-Course/recipe-book/src/pages/edit-recipe/edit-recipe.html"*/,
+            selector: 'page-edit-recipe',template:/*ion-inline-start:"/home/teo/projects/projects/Udemy-Course/recipe-book/src/pages/edit-recipe/edit-recipe.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <ion-buttons left>\n      <button navPop ion-button icon-only>\n        <ion-icon color="light" name="arrow-back"></ion-icon>\n      </button>\n    </ion-buttons>\n\n    <ion-title>{{mode}} Recipe</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">\n    <ion-list>\n\n      <ion-item>\n        <ion-label floating>Title</ion-label>\n        <ion-input\n            type="text"\n            formControlName="title"></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Description</ion-label>\n        <ion-textarea formControlName="description"></ion-textarea>\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Difficulty</ion-label>\n        <ion-select formControlName="difficulty">\n          <ion-option *ngFor="let option of selectOptions"\n                      [value]="option">\n            {{option}}\n          </ion-option>\n        </ion-select>\n      </ion-item>\n\n    </ion-list>\n\n    <button type="button"\n            clear\n            ion-button\n            block\n            (click)="onManageIngredient()">Manage Ingredient</button>\n\n    <ion-list formArrayName="ingredients">\n      <ion-item *ngFor="let igControl of recipeForm.get(\'ingredients\').controls; let i = index">\n        <ion-label floating>Name</ion-label>\n        <ion-input\n            type="text"\n            [formControlName]="i"\n        ></ion-input>\n      </ion-item>\n    </ion-list>\n\n    <button\n            type="submit"\n            ion-button\n            block\n            [disabled]="!recipeForm.valid">{{ mode }} Recipe</button>\n  </form>\n</ion-content>\n'/*ion-inline-end:"/home/teo/projects/projects/Udemy-Course/recipe-book/src/pages/edit-recipe/edit-recipe.html"*/,
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* NavParams */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* ActionSheetController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["b" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["b" /* AlertController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["j" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["j" /* ToastController */]) === "function" && _d || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* NavParams */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* ActionSheetController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["b" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["b" /* AlertController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["j" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["j" /* ToastController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__services_recipe_service_recipe__["a" /* RecipeService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_recipe_service_recipe__["a" /* RecipeService */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* NavController */]) === "function" && _f || Object])
     ], EditRecipePage);
     return EditRecipePage;
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e, _f;
 }());
 
 //# sourceMappingURL=edit-recipe.js.map
@@ -332,27 +351,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-/**
- * Generated class for the RecipePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 var RecipePage = /** @class */ (function () {
     function RecipePage(navCtrl, navParams) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
     }
-    RecipePage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad RecipePage');
+    RecipePage.prototype.ionViewWillLoad = function () {
+        this.recipe = this.navParams.get('recipe');
+        console.log(this.recipe.title);
+        // console.log(this.recipe);
+        // console.log(this.navParams.get('recipe'));
     };
     RecipePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-recipe',template:/*ion-inline-start:"/home/teo/projects/projects/Udemy-Course/recipe-book/src/pages/recipe/recipe.html"*/'<!--\n  Generated template for the RecipePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>recipe</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n\n</ion-content>\n'/*ion-inline-end:"/home/teo/projects/projects/Udemy-Course/recipe-book/src/pages/recipe/recipe.html"*/,
+            selector: 'page-recipe',template:/*ion-inline-start:"/home/teo/projects/projects/Udemy-Course/recipe-book/src/pages/recipe/recipe.html"*/'<ion-header>\n\n    <ion-navbar>\n        <ion-title>{{ recipe.title }}</ion-title>\n    </ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n    <!--<ion-list>-->\n    <!--<ion-item text-center>-->\n    <!--<h2>Spaghetti</h2>-->\n    <!--<ion-note>Easy</ion-note>-->\n    <!--</ion-item>-->\n    <!--</ion-list>-->\n    <ion-grid>\n        <ion-row>\n            <ion-col text-center>\n                <h2>{{ recipe.title }}</h2>\n                <ion-note>{{ recipe.difficulty | uppercase }}</ion-note>\n            </ion-col>\n        </ion-row>\n        <ion-row>\n            <ion-col text-center>\n                <p>{{ recipe.description }}</p>\n            </ion-col>\n        </ion-row>\n        <ion-row>\n            <ion-col>\n                <ion-list>\n                    <ion-item *ngFor="let ingredient of recipe.ingredients">\n                        {{ ingredient.name }}\n                    </ion-item>\n                </ion-list>\n            </ion-col>\n        </ion-row>\n        <ion-row *ngIf="recipe.ingredients.length > 0">\n            <ion-col>\n                <button type="button"\n                        clear\n                        ion-button\n                        (click)="onAddIngredients()">Add Ingredient to Shopping List\n                </button>\n            </ion-col>\n        </ion-row>\n\n        <ion-row>\n            <ion-col text-center>\n                <button\n                        ion-button\n                        outline\n                        block\n                        (click)="onEditRecipe()">Edit Recipe</button>\n            </ion-col>\n            <ion-col text-center>\n                <button\n                        ion-button\n                        outline\n                        block\n                        (click)="onRemoveRecipe()"\n                        color="danger">Remove Recipe</button>\n            </ion-col>\n        </ion-row>\n    </ion-grid>\n\n\n</ion-content>\n'/*ion-inline-end:"/home/teo/projects/projects/Udemy-Course/recipe-book/src/pages/recipe/recipe.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]) === "function" && _b || Object])
     ], RecipePage);
     return RecipePage;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=recipe.js.map
@@ -390,12 +407,14 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_recipe_recipe__ = __webpack_require__(198);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_edit_recipe_edit_recipe__ = __webpack_require__(197);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_shopping_service_shopping__ = __webpack_require__(151);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services_recipe_service_recipe__ = __webpack_require__(277);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -443,6 +462,7 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__["a" /* StatusBar */],
                 __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
                 __WEBPACK_IMPORTED_MODULE_11__services_shopping_service_shopping__["a" /* ShoppingListService */],
+                __WEBPACK_IMPORTED_MODULE_12__services_recipe_service_recipe__["a" /* RecipeService */],
                 { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["u" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["d" /* IonicErrorHandler */] },
             ]
         })
@@ -516,6 +536,66 @@ var MyApp = /** @class */ (function () {
 }());
 
 //# sourceMappingURL=app.component.js.map
+
+/***/ }),
+
+/***/ 277:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RecipeService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_recipe__ = __webpack_require__(278);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+var RecipeService = /** @class */ (function () {
+    function RecipeService() {
+        this.recipes = [];
+    }
+    RecipeService.prototype.addRecipe = function (title, description, difficulty, ingredient) {
+        this.recipes.push(new __WEBPACK_IMPORTED_MODULE_1__models_recipe__["a" /* Recipe */](title, description, difficulty, ingredient));
+    };
+    RecipeService.prototype.getRecipes = function () {
+        return this.recipes.slice();
+    };
+    RecipeService.prototype.updateRecipe = function (index, title, description, difficulty, ingredient) {
+        this.recipes[index] = new __WEBPACK_IMPORTED_MODULE_1__models_recipe__["a" /* Recipe */](title, description, difficulty, ingredient);
+    };
+    RecipeService.prototype.removeRecipe = function (index) {
+        this.recipes.splice(index, 1);
+    };
+    RecipeService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])()
+    ], RecipeService);
+    return RecipeService;
+}());
+
+//# sourceMappingURL=recipe.js.map
+
+/***/ }),
+
+/***/ 278:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Recipe; });
+var Recipe = /** @class */ (function () {
+    function Recipe(title, description, difficulty, ingredients) {
+        this.title = title;
+        this.description = description;
+        this.difficulty = difficulty;
+        this.ingredients = ingredients;
+    }
+    return Recipe;
+}());
+
+//# sourceMappingURL=recipe.js.map
 
 /***/ }),
 

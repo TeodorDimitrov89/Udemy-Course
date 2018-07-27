@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
-import {ActionSheetController, AlertController, NavParams, ToastController} from 'ionic-angular';
+import {ActionSheetController, AlertController, NavController, NavParams, ToastController} from 'ionic-angular';
+import {RecipeService} from "../../services/recipe-service/recipe";
 
 
 @Component({
@@ -16,7 +17,9 @@ export class EditRecipePage implements OnInit{
   constructor(private navParams: NavParams,
               private actionSheetCtrl: ActionSheetController,
               private alertCtrl: AlertController,
-              private toastCtrl: ToastController) {}
+              private toastCtrl: ToastController,
+              private recipeService: RecipeService,
+              private navCtrl: NavController) {}
 
   ngOnInit() {
     this.navParams.get('mode');
@@ -24,7 +27,25 @@ export class EditRecipePage implements OnInit{
   }
 
   onSubmit() {
-    console.log(this.recipeForm);
+    const value = this.recipeForm.value;
+    let ingredients = [];
+
+    if(value.ingredients.length > 0) {
+        ingredients = value.ingredients.map(name => {
+            return {name: name, amount: 1};
+        });
+    }
+
+
+    this.recipeService.addRecipe(
+        value.title,
+        value.description,
+        value.difficulty,
+        ingredients);
+
+    this.recipeForm.reset();
+    this.navCtrl.popToRoot();
+
   }
 
   onManageIngredient() {
@@ -37,17 +58,13 @@ export class EditRecipePage implements OnInit{
                   this.createNewIngredientAlert().present();
               }
             },
+
             {
                 text: 'Remove all Ingredient',
                 role: 'destructive',
                 handler: () => {
                     this.removeAllIngredientItems();
-                    const toastOptions = {
-                        message: 'All ingredients was removed successfully',
-                        duration: 2000,
-                        showCloseButton:true
-                    };
-                    this.presentToast(toastOptions);
+
                 }
             },
             {
@@ -66,11 +83,6 @@ export class EditRecipePage implements OnInit{
   private presentToast(toastOptions:Object) {
 
       let toast = this.toastCtrl.create(toastOptions);
-
-      toast.onDidDismiss(() => {
-          console.log('Dismissed toast');
-      });
-
       toast.present();
   }
 
@@ -93,9 +105,9 @@ export class EditRecipePage implements OnInit{
                   handler: data => {
                       let toastOptions = {
                           message: 'Ingredient was added successfully',
-                          // duration: 2000,
-                          showCloseButton:true,
-                          closeButtonText: 'Ok'
+                          duration: 2000,
+                          // showCloseButton:true,
+                          // closeButtonText: 'Ok'
                       };
                       if(data.name.trim() == '' || data.name == null) {
                           toastOptions.message = 'Name should not be empty!';
@@ -119,6 +131,11 @@ export class EditRecipePage implements OnInit{
         for(let i = len - 1; i >= 0; i--) {
             fArray.removeAt(i);
         }
+        const toastOptions = {
+            message: 'All ingredients was removed successfully',
+            duration: 2000,
+        };
+        this.presentToast(toastOptions);
     }
   }
 
@@ -130,4 +147,5 @@ export class EditRecipePage implements OnInit{
       'ingredients': new FormArray([])
     });
   }
+
 }
