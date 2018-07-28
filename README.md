@@ -33,8 +33,15 @@ Exercise 4:
 
 	Add a "Buy" Button to the "Buyout" Page and have this Button load the Root Page ("Home" Page)
 	
-	
 Section 3: Favourite Quotes Application
 
 	Check application structure image
+	
+Section 4: "The Recipe Book" App (User Input, Forms and Data Management)
+
+	Check application structure image
+	
+Section 5: "The Extended Recipe Book" App (Auth and Http)
+	TODO:
+
 	
