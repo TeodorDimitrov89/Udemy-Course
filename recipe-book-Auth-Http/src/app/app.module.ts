@@ -15,6 +15,7 @@ import { RecipeService } from '../services/recipe-service/recipe';
 import {SignupPage} from "../pages/signup/signup";
 import {SigninPage} from "../pages/signin/signin";
 import {AuthService} from "../services/auth/auth";
+import {SLOptionsPage} from "../pages/shopping-list/sl-options/sl-options";
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import {AuthService} from "../services/auth/auth";
         RecipePage,
         EditRecipePage,
         SignupPage,
-        SigninPage
+        SigninPage,
+        SLOptionsPage
     ],
     imports: [
         BrowserModule,
@@ -41,7 +43,8 @@ import {AuthService} from "../services/auth/auth";
         RecipePage,
         EditRecipePage,
         SignupPage,
-        SigninPage
+        SigninPage,
+        SLOptionsPage
     ],
     providers: [
         StatusBar,
