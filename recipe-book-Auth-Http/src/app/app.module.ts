@@ -16,6 +16,7 @@ import {SignupPage} from "../pages/signup/signup";
 import {SigninPage} from "../pages/signin/signin";
 import {AuthService} from "../services/auth/auth";
 import {SLOptionsPage} from "../pages/shopping-list/sl-options/sl-options";
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import {SLOptionsPage} from "../pages/shopping-list/sl-options/sl-options";
     ],
     imports: [
         BrowserModule,
+        HttpClientModule,
         IonicModule.forRoot(MyApp)
     ],
     bootstrap: [IonicApp],
@@ -55,5 +57,4 @@ import {SLOptionsPage} from "../pages/shopping-list/sl-options/sl-options";
         {provide: ErrorHandler, useClass: IonicErrorHandler},
     ]
 })
-export class AppModule {
-}
+export class AppModule {}

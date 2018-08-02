@@ -77,7 +77,7 @@ var RecipePage = /** @class */ (function () {
     };
     RecipePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-recipe',template:/*ion-inline-start:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\pages\recipe\recipe.html"*/'<ion-header>\n\n\n\n    <ion-navbar>\n\n        <ion-title>{{ recipe.title }}</ion-title>\n\n    </ion-navbar>\n\n\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n    <!--<ion-list>-->\n\n    <!--<ion-item text-center>-->\n\n    <!--<h2>Spaghetti</h2>-->\n\n    <!--<ion-note>Easy</ion-note>-->\n\n    <!--</ion-item>-->\n\n    <!--</ion-list>-->\n\n    <ion-grid>\n\n        <ion-row>\n\n            <ion-col text-center>\n\n                <h2>{{ recipe.title }}</h2>\n\n                <ion-note>{{ recipe.difficulty | uppercase }}</ion-note>\n\n            </ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n            <ion-col text-center>\n\n                <p>{{ recipe.description }}</p>\n\n            </ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n            <ion-col>\n\n                <ion-list>\n\n                    <ion-item *ngFor="let ingredient of recipe.ingredients">\n\n                        {{ ingredient.name }}\n\n                    </ion-item>\n\n                </ion-list>\n\n            </ion-col>\n\n        </ion-row>\n\n        <ion-row *ngIf="recipe.ingredients.length > 0">\n\n            <ion-col text-center>\n\n                <button type="button"\n\n                        clear\n\n                        ion-button\n\n                        (click)="onAddIngredients()">Add Ingredient to Shopping List\n\n                </button>\n\n            </ion-col>\n\n        </ion-row>\n\n\n\n        <ion-row>\n\n            <ion-col>\n\n                <button\n\n                        ion-button\n\n                        outline\n\n                        block\n\n                        (click)="onEditRecipe()">Edit Recipe</button>\n\n            </ion-col>\n\n            <ion-col>\n\n                <button\n\n                        ion-button\n\n                        outline\n\n                        block\n\n                        (click)="onRemoveRecipe()"\n\n                        color="danger">Remove Recipe</button>\n\n            </ion-col>\n\n        </ion-row>\n\n    </ion-grid>\n\n\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\pages\recipe\recipe.html"*/,
+            selector: 'page-recipe',template:/*ion-inline-start:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/pages/recipe/recipe.html"*/'<ion-header>\n\n    <ion-navbar>\n        <ion-title>{{ recipe.title }}</ion-title>\n    </ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n    <!--<ion-list>-->\n    <!--<ion-item text-center>-->\n    <!--<h2>Spaghetti</h2>-->\n    <!--<ion-note>Easy</ion-note>-->\n    <!--</ion-item>-->\n    <!--</ion-list>-->\n    <ion-grid>\n        <ion-row>\n            <ion-col text-center>\n                <h2>{{ recipe.title }}</h2>\n                <ion-note>{{ recipe.difficulty | uppercase }}</ion-note>\n            </ion-col>\n        </ion-row>\n        <ion-row>\n            <ion-col text-center>\n                <p>{{ recipe.description }}</p>\n            </ion-col>\n        </ion-row>\n        <ion-row>\n            <ion-col>\n                <ion-list>\n                    <ion-item *ngFor="let ingredient of recipe.ingredients">\n                        {{ ingredient.name }}\n                    </ion-item>\n                </ion-list>\n            </ion-col>\n        </ion-row>\n        <ion-row *ngIf="recipe.ingredients.length > 0">\n            <ion-col text-center>\n                <button type="button"\n                        clear\n                        ion-button\n                        (click)="onAddIngredients()">Add Ingredient to Shopping List\n                </button>\n            </ion-col>\n        </ion-row>\n\n        <ion-row>\n            <ion-col>\n                <button\n                        ion-button\n                        outline\n                        block\n                        (click)="onEditRecipe()">Edit Recipe</button>\n            </ion-col>\n            <ion-col>\n                <button\n                        ion-button\n                        outline\n                        block\n                        (click)="onRemoveRecipe()"\n                        color="danger">Remove Recipe</button>\n            </ion-col>\n        </ion-row>\n    </ion-grid>\n\n\n</ion-content>\n'/*ion-inline-end:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/pages/recipe/recipe.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
@@ -144,11 +144,26 @@ var ShoppingListPage = /** @class */ (function () {
         popover.present({ ev: event });
         popover.onDidDismiss(function (data) {
             if (data.action == 'load') {
+                _this.authService.getActiveUser().getIdToken()
+                    .then(function (token) {
+                    _this.shoppingService
+                        .fetchList(token)
+                        .subscribe(function (list) {
+                        if (list) {
+                            _this.listItems = list;
+                        }
+                        else {
+                            _this.listItems = [];
+                        }
+                    }, function (error) { console.log(error); });
+                });
             }
             else {
                 _this.authService.getActiveUser().getIdToken()
                     .then(function (token) {
-                    console.log(token);
+                    _this.shoppingService
+                        .storeList(token)
+                        .subscribe(function () { console.log('success!'); }, function (error) { console.log(error); });
                 });
             }
         });
@@ -158,7 +173,7 @@ var ShoppingListPage = /** @class */ (function () {
     };
     ShoppingListPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-shopping-list',template:/*ion-inline-start:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\pages\shopping-list\shopping-list.html"*/'<ion-header>\n\n\n\n  <ion-navbar>\n\n    <ion-buttons left>\n\n      <button ion-button menuToggle>\n\n        <ion-icon name="menu"></ion-icon>\n\n      </button>\n\n\n\n    </ion-buttons>\n\n    <ion-buttons end>\n\n      <button ion-button icon-only (click)="onShowOptions($event)">\n\n        <ion-icon name="more"></ion-icon>\n\n      </button>\n\n    </ion-buttons>\n\n    <ion-title>Shopping List</ion-title>\n\n\n\n  </ion-navbar>\n\n\n\n</ion-header>\n\n\n\n\n\n\n\n<ion-content padding>\n\n\n\n  <form #f="ngForm" (ngSubmit)="onAddItem(f)">\n\n    <ion-list>\n\n\n\n      <ion-item>\n\n        <ion-label fixed>Name</ion-label>\n\n        <ion-input\n\n                type="text"\n\n                name="ingredientName"\n\n                placeholder="Milk"\n\n                id="ingredientName"\n\n                required\n\n                ngModel></ion-input>\n\n      </ion-item>\n\n\n\n      <ion-item>\n\n        <ion-label fixed>Amount</ion-label>\n\n        <ion-input\n\n                type="number"\n\n                name="amount"\n\n                placeholder="2"\n\n                min="1"\n\n                required\n\n                ngModel></ion-input>\n\n      </ion-item>\n\n\n\n    </ion-list>\n\n    <button\n\n            ion-button\n\n            type="submit"\n\n            block\n\n            [disabled]="!f.valid">Add Item</button>\n\n  </form>\n\n  <ion-list >\n\n    <ion-item *ngFor="let item of listItems; let i = index" (click)="onRemoveItem(i)">\n\n      <h2>{{ item.name }} ({{ item.amount }})</h2>\n\n    </ion-item>\n\n  </ion-list>\n\n\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\pages\shopping-list\shopping-list.html"*/,
+            selector: 'page-shopping-list',template:/*ion-inline-start:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/pages/shopping-list/shopping-list.html"*/'<ion-header>\n\n  <ion-navbar>\n    <ion-buttons left>\n      <button ion-button menuToggle>\n        <ion-icon name="menu"></ion-icon>\n      </button>\n\n    </ion-buttons>\n    <ion-buttons end>\n      <button ion-button icon-only (click)="onShowOptions($event)">\n        <ion-icon name="more"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-title>Shopping List</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n  <form #f="ngForm" (ngSubmit)="onAddItem(f)">\n    <ion-list>\n\n      <ion-item>\n        <ion-label fixed>Name</ion-label>\n        <ion-input\n                type="text"\n                name="ingredientName"\n                placeholder="Milk"\n                id="ingredientName"\n                required\n                ngModel></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label fixed>Amount</ion-label>\n        <ion-input\n                type="number"\n                name="amount"\n                placeholder="2"\n                min="1"\n                required\n                ngModel></ion-input>\n      </ion-item>\n\n    </ion-list>\n    <button\n            ion-button\n            type="submit"\n            block\n            [disabled]="!f.valid">Add Item</button>\n  </form>\n  <ion-list >\n    <ion-item *ngFor="let item of listItems; let i = index" (click)="onRemoveItem(i)">\n      <h2>{{ item.name }} ({{ item.amount }})</h2>\n    </ion-item>\n  </ion-list>\n\n\n</ion-content>\n'/*ion-inline-end:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/pages/shopping-list/shopping-list.html"*/,
         }),
         __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_shopping_service_shopping__["a" /* ShoppingListService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_shopping_service_shopping__["a" /* ShoppingListService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* PopoverController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* PopoverController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__services_auth_auth__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_auth_auth__["a" /* AuthService */]) === "function" && _c || Object])
     ], ShoppingListPage);
@@ -279,7 +294,7 @@ var TabsPage = /** @class */ (function () {
     }
     TabsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-tabs',template:/*ion-inline-start:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\pages\tabs\tabs.html"*/'<ion-tabs>\n\n  <ion-tab [root]="slPage" tabIcon="list-box" tabTitle="Shopping List" ></ion-tab>\n\n  <ion-tab [root]="recipesPage" tabIcon="book" tabTitle="Recipes"></ion-tab>\n\n</ion-tabs>'/*ion-inline-end:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\pages\tabs\tabs.html"*/,
+            selector: 'page-tabs',template:/*ion-inline-start:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/pages/tabs/tabs.html"*/'<ion-tabs>\n  <ion-tab [root]="slPage" tabIcon="list-box" tabTitle="Shopping List" ></ion-tab>\n  <ion-tab [root]="recipesPage" tabIcon="book" tabTitle="Recipes"></ion-tab>\n</ion-tabs>'/*ion-inline-end:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/pages/tabs/tabs.html"*/,
         })
     ], TabsPage);
     return TabsPage;
@@ -329,7 +344,7 @@ var RecipesPage = /** @class */ (function () {
     };
     RecipesPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-recipes',template:/*ion-inline-start:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\pages\recipes\recipes.html"*/'<ion-header>\n\n    <ion-navbar>\n\n        <ion-buttons left>\n\n            <button ion-button icon-only menuToggle>\n\n                <ion-icon name="menu"></ion-icon>\n\n            </button>\n\n        </ion-buttons>\n\n        <ion-buttons end>\n\n            <button ion-button icon-only (click)="onNewRecipe()">\n\n                <ion-icon name="add" ></ion-icon>\n\n            </button>\n\n        </ion-buttons>\n\n        <ion-title text-center>Recipes</ion-title>\n\n    </ion-navbar>\n\n</ion-header>\n\n\n\n\n\n<ion-content padding>\n\n    <ion-list>\n\n        <button ion-item\n\n                detail-push\n\n                *ngFor="let recipe of recipes; let i = index"\n\n                (click)="onLoadRecipe(recipe, i)">\n\n            <h2>{{recipe.title}}</h2>\n\n            <ion-note>{{recipe.difficulty}}</ion-note>\n\n        </button>\n\n    </ion-list>\n\n</ion-content>\n\n'/*ion-inline-end:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\pages\recipes\recipes.html"*/,
+            selector: 'page-recipes',template:/*ion-inline-start:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/pages/recipes/recipes.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-buttons left>\n            <button ion-button icon-only menuToggle>\n                <ion-icon name="menu"></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-buttons end>\n            <button ion-button icon-only (click)="onNewRecipe()">\n                <ion-icon name="add" ></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-title text-center>Recipes</ion-title>\n    </ion-navbar>\n</ion-header>\n\n\n<ion-content padding>\n    <ion-list>\n        <button ion-item\n                detail-push\n                *ngFor="let recipe of recipes; let i = index"\n                (click)="onLoadRecipe(recipe, i)">\n            <h2>{{recipe.title}}</h2>\n            <ion-note>{{recipe.difficulty}}</ion-note>\n        </button>\n    </ion-list>\n</ion-content>\n'/*ion-inline-end:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/pages/recipes/recipes.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_3__services_recipe_service_recipe__["a" /* RecipeService */]])
@@ -389,7 +404,7 @@ var SigninPage = /** @class */ (function () {
     };
     SigninPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-signin',template:/*ion-inline-start:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\pages\signin\signin.html"*/'<ion-header>\n\n  <ion-navbar>\n    <ion-buttons left>\n      <button ion-button menuToggle>\n        <ion-icon name="menu"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-title>Signin</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <form #f="ngForm" (ngSubmit)="onSignin(f)">\n    <ion-list>\n      <ion-item>\n        <ion-label fixed>Email</ion-label>\n        <ion-input\n            type="email"\n            name="email"\n            ngModel\n            required></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label fixed>Password</ion-label>\n        <ion-input\n            type="password"\n            name="password"\n            ngModel\n            required></ion-input>\n      </ion-item>\n    </ion-list>\n    <button ion-button block type="submit" [disabled]="!f.valid">Signin</button>\n  </form>\n</ion-content>\n'/*ion-inline-end:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\pages\signin\signin.html"*/,
+            selector: 'page-signin',template:/*ion-inline-start:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/pages/signin/signin.html"*/'<ion-header>\n\n  <ion-navbar>\n    <ion-buttons left>\n      <button ion-button menuToggle>\n        <ion-icon name="menu"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-title>Signin</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <form #f="ngForm" (ngSubmit)="onSignin(f)">\n    <ion-list>\n      <ion-item>\n        <ion-label fixed>Email</ion-label>\n        <ion-input\n            type="email"\n            name="email"\n            ngModel\n            required></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label fixed>Password</ion-label>\n        <ion-input\n            type="password"\n            name="password"\n            ngModel\n            required></ion-input>\n      </ion-item>\n    </ion-list>\n    <button ion-button block type="submit" [disabled]="!f.valid">Signin</button>\n  </form>\n</ion-content>\n'/*ion-inline-end:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/pages/signin/signin.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_auth_auth__["a" /* AuthService */],
             __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* LoadingController */],
@@ -451,7 +466,7 @@ var SignupPage = /** @class */ (function () {
     };
     SignupPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-signup',template:/*ion-inline-start:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\pages\signup\signup.html"*/'<ion-header>\n\n  <ion-navbar>\n    <ion-buttons left>\n      <button ion-button menuToggle>\n        <ion-icon name="menu"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-title>Signup</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <form #f="ngForm" (ngSubmit)="onSignup(f)">\n    <ion-list>\n\n      <ion-item>\n        <ion-label fixed>Email</ion-label>\n        <ion-input\n            type="email"\n            name="email"\n            ngModel\n            required></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label fixed>Password</ion-label>\n        <ion-input\n            type="password"\n            name="password"\n            ngModel\n            [minlength]="6"\n            required></ion-input>\n      </ion-item>\n\n      <!--<ion-item>-->\n        <!--<ion-label floating>Confirm Password</ion-label>-->\n        <!--<ion-input-->\n            <!--type="password"-->\n            <!--name="confirm-password"-->\n            <!--ngModel-->\n            <!--required></ion-input>-->\n      <!--</ion-item>-->\n\n    </ion-list>\n    <button\n        ion-button\n        block\n        [disabled]="!f.valid"\n        type="submit">Signup\n    </button>\n  </form>\n</ion-content>\n'/*ion-inline-end:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\pages\signup\signup.html"*/,
+            selector: 'page-signup',template:/*ion-inline-start:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/pages/signup/signup.html"*/'<ion-header>\n\n  <ion-navbar>\n    <ion-buttons left>\n      <button ion-button menuToggle>\n        <ion-icon name="menu"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-title>Signup</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <form #f="ngForm" (ngSubmit)="onSignup(f)">\n    <ion-list>\n\n      <ion-item>\n        <ion-label fixed>Email</ion-label>\n        <ion-input\n            type="email"\n            name="email"\n            ngModel\n            required></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label fixed>Password</ion-label>\n        <ion-input\n            type="password"\n            name="password"\n            ngModel\n            [minlength]="6"\n            required></ion-input>\n      </ion-item>\n\n      <!--<ion-item>-->\n        <!--<ion-label floating>Confirm Password</ion-label>-->\n        <!--<ion-input-->\n            <!--type="password"-->\n            <!--name="confirm-password"-->\n            <!--ngModel-->\n            <!--required></ion-input>-->\n      <!--</ion-item>-->\n\n    </ion-list>\n    <button\n        ion-button\n        block\n        [disabled]="!f.valid"\n        type="submit">Signup\n    </button>\n  </form>\n</ion-content>\n'/*ion-inline-end:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/pages/signup/signup.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_auth_auth__["a" /* AuthService */],
             __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* LoadingController */],
@@ -500,12 +515,14 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_signin_signin__ = __webpack_require__(207);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__services_auth_auth__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_shopping_list_sl_options_sl_options__ = __webpack_require__(159);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__angular_common_http__ = __webpack_require__(298);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -541,6 +558,7 @@ var AppModule = /** @class */ (function () {
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
+                __WEBPACK_IMPORTED_MODULE_17__angular_common_http__["b" /* HttpClientModule */],
                 __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* MyApp */], {}, {
                     links: [
                         { loadChildren: '../pages/recipe/recipe.module#RecipePageModule', name: 'RecipePage', segment: 'recipe', priority: 'low', defaultHistory: [] },
@@ -692,7 +710,7 @@ var MyApp = /** @class */ (function () {
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */])
     ], MyApp.prototype, "nav", void 0);
     MyApp = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({template:/*ion-inline-start:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\app\app.html"*/'<ion-menu [content]="nav">\n\n  <ion-header>\n\n    <ion-toolbar>\n\n      <ion-title text-center>Menu</ion-title>\n\n    </ion-toolbar>\n\n  </ion-header>\n\n  <ion-content>\n\n    <ion-list>\n\n      <button ion-item\n\n              icon-left\n\n              detail-push\n\n              (click)="onLoad(rootPage)"\n\n              *ngIf="isAuthenticated">\n\n        <ion-icon name="book"></ion-icon>\n\n        Recipe Book\n\n      </button>\n\n      <button ion-item\n\n              icon-left\n\n              detail-push\n\n              (click)="onLoad(signinPage)"\n\n              *ngIf="!isAuthenticated">\n\n        <ion-icon name="log-in"></ion-icon>\n\n        Signin\n\n      </button>\n\n\n\n      <button ion-item\n\n              icon-left\n\n              detail-push\n\n              (click)="onLoad(signupPage)"\n\n              *ngIf="!isAuthenticated">\n\n        <ion-icon name="person"></ion-icon>\n\n        Signup\n\n      </button>\n\n\n\n      <button ion-item\n\n              icon-left\n\n              detail-push\n\n              (click)="onLogout()"\n\n              *ngIf="isAuthenticated">\n\n        <ion-icon name="log-out"></ion-icon>\n\n        Logout\n\n      </button>\n\n    </ion-list>\n\n  </ion-content>\n\n</ion-menu>\n\n\n\n\n\n<ion-nav [root]="rootPage" #nav></ion-nav>\n\n'/*ion-inline-end:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\app\app.html"*/
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({template:/*ion-inline-start:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/app/app.html"*/'<ion-menu [content]="nav">\n  <ion-header>\n    <ion-toolbar>\n      <ion-title text-center>Menu</ion-title>\n    </ion-toolbar>\n  </ion-header>\n  <ion-content>\n    <ion-list>\n      <button ion-item\n              icon-left\n              detail-push\n              (click)="onLoad(rootPage)"\n              *ngIf="isAuthenticated">\n        <ion-icon name="book"></ion-icon>\n        Recipe Book\n      </button>\n      <button ion-item\n              icon-left\n              detail-push\n              (click)="onLoad(signinPage)"\n              *ngIf="!isAuthenticated">\n        <ion-icon name="log-in"></ion-icon>\n        Signin\n      </button>\n\n      <button ion-item\n              icon-left\n              detail-push\n              (click)="onLoad(signupPage)"\n              *ngIf="!isAuthenticated">\n        <ion-icon name="person"></ion-icon>\n        Signup\n      </button>\n\n      <button ion-item\n              icon-left\n              detail-push\n              (click)="onLogout()"\n              *ngIf="isAuthenticated">\n        <ion-icon name="log-out"></ion-icon>\n        Logout\n      </button>\n    </ion-list>\n  </ion-content>\n</ion-menu>\n\n\n<ion-nav [root]="rootPage" #nav></ion-nav>\n'/*ion-inline-end:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/app/app.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */],
             __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */],
@@ -941,7 +959,7 @@ var EditRecipePage = /** @class */ (function () {
     };
     EditRecipePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-edit-recipe',template:/*ion-inline-start:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\pages\edit-recipe\edit-recipe.html"*/'<ion-header>\n\n\n\n  <ion-navbar>\n\n\n\n    <ion-buttons left>\n\n      <button navPop ion-button icon-only>\n\n        <ion-icon color="light" name="arrow-back"></ion-icon>\n\n      </button>\n\n    </ion-buttons>\n\n\n\n    <ion-title>{{mode}} Recipe</ion-title>\n\n\n\n  </ion-navbar>\n\n\n\n</ion-header>\n\n\n\n\n\n<ion-content padding>\n\n  <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">\n\n    <ion-list>\n\n\n\n      <ion-item>\n\n        <ion-label floating>Title</ion-label>\n\n        <ion-input\n\n            type="text"\n\n            formControlName="title"></ion-input>\n\n      </ion-item>\n\n\n\n      <ion-item>\n\n        <ion-label floating>Description</ion-label>\n\n        <ion-textarea formControlName="description"></ion-textarea>\n\n      </ion-item>\n\n\n\n      <ion-item>\n\n        <ion-label floating>Difficulty</ion-label>\n\n        <ion-select formControlName="difficulty">\n\n          <ion-option *ngFor="let option of selectOptions"\n\n                      [value]="option">\n\n            {{option}}\n\n          </ion-option>\n\n        </ion-select>\n\n      </ion-item>\n\n\n\n    </ion-list>\n\n\n\n    <button type="button"\n\n            clear\n\n            ion-button\n\n            block\n\n            (click)="onManageIngredient()">Manage Ingredient</button>\n\n\n\n    <ion-list formArrayName="ingredients">\n\n      <ion-item *ngFor="let igControl of recipeForm.get(\'ingredients\').controls; let i = index">\n\n        <ion-label floating>Name</ion-label>\n\n        <ion-input\n\n            type="text"\n\n            [formControlName]="i"\n\n        ></ion-input>\n\n      </ion-item>\n\n    </ion-list>\n\n\n\n    <button\n\n            type="submit"\n\n            ion-button\n\n            block\n\n            [disabled]="!recipeForm.valid">{{ mode }} Recipe</button>\n\n  </form>\n\n</ion-content>\n\n'/*ion-inline-end:"D:\school\1.Programming SoftUni-Homework\Udemy-Course\recipe-book-Auth-Http\src\pages\edit-recipe\edit-recipe.html"*/,
+            selector: 'page-edit-recipe',template:/*ion-inline-start:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/pages/edit-recipe/edit-recipe.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <ion-buttons left>\n      <button navPop ion-button icon-only>\n        <ion-icon color="light" name="arrow-back"></ion-icon>\n      </button>\n    </ion-buttons>\n\n    <ion-title>{{mode}} Recipe</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">\n    <ion-list>\n\n      <ion-item>\n        <ion-label floating>Title</ion-label>\n        <ion-input\n            type="text"\n            formControlName="title"></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Description</ion-label>\n        <ion-textarea formControlName="description"></ion-textarea>\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Difficulty</ion-label>\n        <ion-select formControlName="difficulty">\n          <ion-option *ngFor="let option of selectOptions"\n                      [value]="option">\n            {{option}}\n          </ion-option>\n        </ion-select>\n      </ion-item>\n\n    </ion-list>\n\n    <button type="button"\n            clear\n            ion-button\n            block\n            (click)="onManageIngredient()">Manage Ingredient</button>\n\n    <ion-list formArrayName="ingredients">\n      <ion-item *ngFor="let igControl of recipeForm.get(\'ingredients\').controls; let i = index">\n        <ion-label floating>Name</ion-label>\n        <ion-input\n            type="text"\n            [formControlName]="i"\n        ></ion-input>\n      </ion-item>\n    </ion-list>\n\n    <button\n            type="submit"\n            ion-button\n            block\n            [disabled]="!recipeForm.valid">{{ mode }} Recipe</button>\n  </form>\n</ion-content>\n'/*ion-inline-end:"/home/teo/projects/projects/Udemy-Course/recipe-book-Auth-Http/src/pages/edit-recipe/edit-recipe.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["j" /* NavParams */],
             __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* ActionSheetController */],
@@ -964,19 +982,31 @@ var EditRecipePage = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ShoppingListService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_ingredient__ = __webpack_require__(259);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__auth_auth__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_common_http__ = __webpack_require__(298);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operators__ = __webpack_require__(328);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_operators__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
 
 
 var ShoppingListService = /** @class */ (function () {
-    function ShoppingListService() {
+    // private id:number = 0;
+    function ShoppingListService(http, authService) {
+        this.http = http;
+        this.authService = authService;
         this.ingredients = [];
     }
-    // private id:number = 0;
     ShoppingListService.prototype.addItem = function (name, amount) {
         // this.ingredients.push(new Ingredient(this.id,name,amount));
         this.ingredients.push(new __WEBPACK_IMPORTED_MODULE_1__models_ingredient__["a" /* Ingredient */](name, amount));
@@ -995,10 +1025,25 @@ var ShoppingListService = /** @class */ (function () {
         // });
         this.ingredients.splice(index, 1);
     };
+    ShoppingListService.prototype.storeList = function (token) {
+        var userId = this.authService.getActiveUser().uid;
+        return this.http.put('https://ionic3-app-deb80.firebaseio.com/' + userId + '/shopping-list.json?auth=' + token, this.ingredients);
+    };
+    ShoppingListService.prototype.fetchList = function (token) {
+        var _this = this;
+        var userId = this.authService.getActiveUser().uid;
+        return this.http.get('https://ionic3-app-deb80.firebaseio.com/' + userId + '/shopping-list.json?auth=' + token)
+            .pipe(Object(__WEBPACK_IMPORTED_MODULE_4_rxjs_operators__["map"])(function (data) {
+            _this.ingredients = data;
+            return data;
+        }));
+    };
     ShoppingListService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])()
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["a" /* HttpClient */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__auth_auth__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__auth_auth__["a" /* AuthService */]) === "function" && _b || Object])
     ], ShoppingListService);
     return ShoppingListService;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=shopping.js.map
