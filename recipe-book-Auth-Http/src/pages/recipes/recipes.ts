@@ -25,6 +25,8 @@ export class RecipesPage {
 
     ionViewWillEnter() {
         this.recipes = this.recipeService.getRecipes();
+
+
     }
 
     onLoadRecipe(recipe:Recipe, index: number) {

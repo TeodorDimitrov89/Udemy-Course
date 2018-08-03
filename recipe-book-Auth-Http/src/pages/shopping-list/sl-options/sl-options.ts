@@ -24,11 +24,11 @@ import {Component} from "@angular/core";
     `,
 })
 export class SLOptionsPage {
-    constructor(
-        private viewCtrl: ViewController) {}
+    constructor(private viewCtrl: ViewController) {}
 
     onAction(action: string) {
-         this.viewCtrl.dismiss({action: action});
+
+        this.viewCtrl.dismiss({ action: action });
     }
 
 }
