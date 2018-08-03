@@ -43,6 +43,7 @@ export class EditRecipePage implements OnInit {
             ingredients = value.ingredients.map(name => {
                 return {name: name, amount: 1};
             });
+
         }
         if(this.mode == 'Edit') {
             this.recipeService.updateRecipe(this.index,value.title, value.description, value.difficulty, ingredients)

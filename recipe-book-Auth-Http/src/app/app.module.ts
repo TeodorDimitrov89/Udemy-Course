@@ -15,7 +15,7 @@ import { RecipeService } from '../services/recipe-service/recipe';
 import {SignupPage} from "../pages/signup/signup";
 import {SigninPage} from "../pages/signin/signin";
 import {AuthService} from "../services/auth/auth";
-import {SLOptionsPage} from "../pages/shopping-list/sl-options/sl-options";
+import {DatabaseOptionsPage} from "../pages/database-options/database-options";
 import {HttpClientModule} from "@angular/common/http";
 
 
@@ -29,7 +29,7 @@ import {HttpClientModule} from "@angular/common/http";
         EditRecipePage,
         SignupPage,
         SigninPage,
-        SLOptionsPage
+        DatabaseOptionsPage
     ],
     imports: [
         BrowserModule,
@@ -46,7 +46,7 @@ import {HttpClientModule} from "@angular/common/http";
         EditRecipePage,
         SignupPage,
         SigninPage,
-        SLOptionsPage
+        DatabaseOptionsPage
     ],
     providers: [
         StatusBar,

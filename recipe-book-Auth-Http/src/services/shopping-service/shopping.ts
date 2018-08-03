@@ -39,9 +39,11 @@ export class ShoppingListService {
   fetchList(token: string): Observable<Ingredient[]> {
       const userId = this.authService.getActiveUser().uid;
       return this.http.get<Ingredient[]>('https://ionic3-app-deb80.firebaseio.com/' + userId + '/shopping-list.json?auth=' + token)
-          .pipe(map(data => {
-                  this.ingredients = data;
-                  return data;
+          .pipe(map(ingredients => {
+                 if(ingredients) {
+                     this.ingredients = ingredients;
+                     return ingredients;
+                 }
               })
           );
   }
