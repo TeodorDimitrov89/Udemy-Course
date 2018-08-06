@@ -1,4 +1,3 @@
-
 <ion-header>
 
   <ion-navbar>
@@ -9,27 +8,88 @@
 
 
 <ion-content padding>
-  <ion-list>
-    <ion-item>
-      <ion-label floating></ion-label>
-      <ion-input type="text" placeholder="Title"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating></ion-label>
-      <ion-input type="text" placeholder="Short Description"></ion-input>
-    </ion-item>
-  </ion-list>
-  <!--<ion-grid>-->
-    <!--<ion-row>-->
-      <!--<ion-col>-->
-        <!--<ion-label floating></ion-label>-->
-        <!--<ion-input type="text" placeholder="Title"></ion-input>-->
-      <!--</ion-col>-->
+  <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Title</ion-label>
+        <ion-input required
+                   type="text"
+                   ngModel
+                   minlength="4"
+                   name="title"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Short Description</ion-label>
+        <ion-textarea required
+                   ngModel
+                   name="description"></ion-textarea>
+      </ion-item>
+    </ion-list>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <button ion-button
+              outline
+              block
+              type="button"
+              icon-start
+              no-padding
+              (click)="onLocate()">
+            <ion-icon name="locate"></ion-icon>
+            Locate me
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button
+              outline
+              block
+              type="button"
+              icon-start
+              no-padding
+          (click)="onOpenMap()">
+            <ion-icon name="map"></ion-icon>
+            Select on Map
+          </button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <p>Selected place...</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col text-center>
+          <h3>Take a photo!</h3>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <button ion-button
+              block
+              outline
+              icon-start
+              type="button"
+              (click)="onTakePhoto()">
+            <ion-icon name="camera"></ion-icon>
+            Open Camera
+          </button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <img [src]="">
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <button ion-button
+                  type="submit"
+                  color="secondary"
+                  block
+                  [disabled]="!form.form.valid">Add this Place</button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-      <!--<ion-col>-->
-        <!--<ion-label floating></ion-label>-->
-        <!--<ion-input type="text" placeholder="Short Description"></ion-input>-->
-      <!--</ion-col>-->
-    <!--</ion-row>-->
-  <!--</ion-grid>-->
+  </form>
 </ion-content>

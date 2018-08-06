@@ -9,7 +9,9 @@ import {AddPlacePage} from "../pages/add-place/add-place";
 import {HomePage} from "../pages/home/home";
 import {SetLocationPage} from "../pages/set-location/set-location";
 import {PlacePage} from "../pages/place/place";
+import {AgmCoreModule} from "@agm/core";
 
+//AIzaSyD9IRHLtHndx5pW_p1q8LYaBJXWj4ukj_Y
 
 @NgModule({
     declarations: [
@@ -21,7 +23,10 @@ import {PlacePage} from "../pages/place/place";
     ],
     imports: [
         BrowserModule,
-        IonicModule.forRoot(MyApp)
+        IonicModule.forRoot(MyApp),
+        AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyD9IRHLtHndx5pW_p1q8LYaBJXWj4ukj_Y'
+        })
     ],
     bootstrap: [IonicApp],
     entryComponents: [
